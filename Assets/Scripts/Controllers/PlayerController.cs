@@ -1,35 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-[RequireComponent(typeof(Rigidbody2D),typeof(BoxCollider2D))]
+﻿using UnityEngine;
+
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rb;
+    public static PlayerController Instance { get; private set; }
+
+    [SerializeField] private Tank player;
     [SerializeField] private FixedJoystick joystick;
-    [SerializeField] private float moveSpeed;
-    [SerializeField] GameObject bullet;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void FixedUpdate()
     {
-      rb.velocity = new Vector3(joystick.Horizontal * moveSpeed, joystick.Vertical * moveSpeed);
+        //var movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        var movement = new Vector2(joystick.Horizontal, joystick.Vertical);
 
-        //if (joystick.Horizontal != 0 || joystick.Vertical != 0)
-       
+       /* if (Input.GetKeyDown(KeyCode.Space))
+        {
+            player.Attack(player.transform.up);
+        }*/
+
+        player.Move(movement);
+        player.Rotate(movement);
     }
-   /* private void Update()
-    {
-        if (joystick.Horizontal > .2f)
-            transform.Rotate(0, 0, -90);
-        else if (joystick.Horizontal < .2f)
-            transform.Rotate(0, 0, 90);
-        else
-            transform.Rotate(0, 0, 0);
-
-    }*/
-
-    public void Gun()
-    {
-        Instantiate(bullet, transform.position, transform.rotation);
-       
-    }
+   
 }
